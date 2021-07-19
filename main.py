@@ -78,5 +78,5 @@ if __name__ == '__main__':
         board = Board(size=size)
         for row_index, column_index in enumerate(rows):
             board.put('queen', (row_index, column_index))
-        board.panel = cv2.putText(board.panel, f'Solution {solution_index}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1, cv2.LINE_AA)
+        board.panel = cv2.putText(board.panel, f'Solution {solution_index}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
         board.draw()
