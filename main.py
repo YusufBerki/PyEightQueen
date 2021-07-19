@@ -1,10 +1,13 @@
 import time
+import cv2
+from board import Board
 
 
 class QueenPlaces:
     def __init__(self, size):
         self.size = size
-        self.number_of_solutions = 0
+
+        self.solutions = []
 
     def solve(self):
         """
@@ -18,8 +21,8 @@ class QueenPlaces:
         Find all possible placements and check with check_position
         """
         if column_index == self.size:
+            self.solutions.append(rows.copy())
             self.show(rows)
-            self.number_of_solutions += 1
             return True
 
         for column in range(self.size):
@@ -41,34 +44,39 @@ class QueenPlaces:
                 return False
         return True
 
-    def show(self, rows: list, just_terminal: bool = False):
+    def show(self, rows: list):
         """
         Shows the results found
 
         :param rows: list
             List of column indexes for correctly found positions.
             (e.g. [0, 4, 7, 5, 2, 6, 1, 3])
-
-        :param just_terminal:
-            If True it only shows in terminal.
-            If False, it shows on the image with cv2.
         """
 
         rows2d = [["Q" if column == rows[row] else "" for column in range(self.size)] for row in range(self.size)]
-
-        if just_terminal:
-            for row in rows2d:
-                print(row)
-        else:
-            # TODO: Show in board with opencv
-            pass
+        print(f"Solution {len(self.solutions)}:")
+        for row in rows2d:
+            print(row)
+        print("\n", "-" * 50, "\n")
 
 
 if __name__ == '__main__':
     size = 8
 
     qp = QueenPlaces(size)
+
     start_time = time.time()
+
     qp.solve()
+
     end_time = time.time()
-    print(f"Founded {qp.number_of_solutions} solution in {str(end_time - start_time)[:7]} seconds.")
+
+    print(f"Founded {len(qp.solutions)} solution in {str(end_time - start_time)[:7]} seconds.")
+
+    # Show with CV2
+    for solution_index, rows in enumerate(qp.solutions):
+        board = Board(size=size)
+        for row_index, column_index in enumerate(rows):
+            board.put('queen', (row_index, column_index))
+        board.panel = cv2.putText(board.panel, f'Solution {solution_index}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1, cv2.LINE_AA)
+        board.draw()
