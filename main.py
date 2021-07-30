@@ -1,6 +1,8 @@
 import time
 import cv2
+import os
 from board import Board
+from utils import RESULTS_DIR, make_dirs
 
 
 class QueenPlaces:
@@ -73,10 +75,28 @@ if __name__ == '__main__':
 
     print(f"Founded {len(qp.solutions)} solution in {str(end_time - start_time)[:7]} seconds.")
 
+    # ===========================================
     # Show with CV2
+    # ===========================================
+
+    result_path = make_dirs(os.path.join(RESULTS_DIR, f"{size}x{size}"))
+
     for solution_index, rows in enumerate(qp.solutions):
+        # Create chessboard
         board = Board(size=size)
+
+        # Put queens to chessboard
         for row_index, column_index in enumerate(rows):
             board.put('queen', (row_index, column_index))
-        board.panel = cv2.putText(board.panel, f'Solution {solution_index}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+
+        # Draw queens
         board.draw()
+
+        # Save solution image
+        board.write(os.path.join(result_path, f'{solution_index}.png'))
+
+        # Write solution index to image
+        board.panel = cv2.putText(board.panel, f'Solution {solution_index}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+
+        # Show solution
+        board.show()

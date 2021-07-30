@@ -2,6 +2,7 @@ import os
 import cv2
 import string
 import numpy as np
+from utils import PIECES, COLOR_SCHEME
 
 
 def overlay_transparent(background, overlay, x, y):
@@ -12,27 +13,6 @@ def overlay_transparent(background, overlay, x, y):
     mask = overlay[..., 3:] / 255.0
     background[y:y + h, x:x + w] = (1.0 - mask) * background[y:y + h, x:x + w] + mask * overlay_image
     return background
-
-
-DATA_DIR = 'data'
-IMG_DIR = os.path.join(DATA_DIR, 'img')
-PIECES_DIR = os.path.join(IMG_DIR, 'pieces')
-
-COLOR_SCHEME = {
-    0: {
-        1: (0, 0, 0),
-        0: (255, 255, 255),
-    },
-    1: {
-        0: (181, 217, 240),
-        1: (99, 136, 181)
-
-    }
-}
-
-PIECES = {
-    "queen": {"path": os.path.join(PIECES_DIR, 'queen.png')}
-}
 
 
 class Board():
@@ -101,8 +81,12 @@ class Board():
                 mask = piece_img[..., 3:] / 255.0
                 self.panel[ymin:ymax, xmin:xmax] = (1.0 - mask) * self.panel[ymin:ymax, xmin:xmax] + mask * piece_img
 
+    def show(self):
         cv2.imshow("Solution", self.panel)
         cv2.waitKey()
+
+    def write(self, path):
+        cv2.imwrite(path, self.panel)
 
     def _get_piece(self, piece_name):
         piece = PIECES.get(piece_name, None)
