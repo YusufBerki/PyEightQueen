@@ -1,4 +1,6 @@
 # PyEightQueen
+<a href="https://www.codefactor.io/repository/github/yusufberki/pyeightqueen"><img src="https://www.codefactor.io/repository/github/yusufberki/pyeightqueen/badge" alt="CodeFactor" /></a>
+<a href="https://github.com/YusufBerki/PyImageClassification/blob/master/LICENSE"><img src="https://img.shields.io/github/license/YusufBerki/pyeightqueen"></a>
 
 A Python project for solving 8 queens problem and visualizing it using OpenCV library.
 
